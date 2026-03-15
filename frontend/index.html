@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Drop Blood Bank</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: 0;
+            animation: float 20s infinite alternate;
+        }
+        .blob-1 { width: 500px; height: 500px; top: -100px; right: -100px; }
+        .blob-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-50px, 50px) scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stats-bar {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 32px 0;
+            margin-top: -60px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar">
+        <div class="nav-brand"><i data-lucide="droplet"></i> Life Drop</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="search.html" class="nav-link">Find Blood</a>
+            <a href="donate.html" class="nav-link">Donate</a>
+            <a href="request.html" class="nav-link">Request Blood</a>
+            <a href="admin.html" class="nav-link text-warning" style="font-weight:600">Admin</a>
+        </div>
+        
+        <!-- 
+        ========================================================================
+        AUTH READY: To enable login, simply uncomment the container below.
+        Then uncomment `/api/auth` in server.js and authMiddleware usage.
+        ========================================================================
+        <div class="auth-buttons-container">
+            <a href="login.html" class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Sign In</a>
+            <a href="register.html" class="btn btn-primary" style="padding: 6px 16px; font-size: 0.9rem;">Join Now</a>
+        </div> 
+        -->
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        
+        <div class="container hero-content">
+            <h1 data-aos="fade-up">Every Drop Counts.<br><span class="text-gradient">Every Second Matters.</span></h1>
+            <p class="subtitle" data-aos="fade-up" data-aos-delay="100">
+                Join our modern blood network. Connecting willing donors with critical hospital needs instantly through intelligent real-time matching.
+            </p>
+            <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 80px;" data-aos="fade-up" data-aos-delay="200">
+                <a href="search.html" class="btn btn-primary" style="padding: 16px 32px; font-size: 1.1rem; border-radius: 99px;">
+                    Find Blood Now <i data-lucide="arrow-right"></i>
+                </a>
+                <a href="donate.html" class="btn btn-glass" style="padding: 16px 32px; font-size: 1.1rem; border-radius: 99px;">
+                    Become a Donor
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── STATS BAR ── -->
+    <div class="container">
+        <div class="stats-bar" data-aos="fade-up" data-aos-delay="300">
+            <div class="grid-2" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-item">
+                    <div class="stat-number" id="sc_donors">50000+</div>
+                    <div class="text-muted text-uppercase" style="font-size: 0.85rem; font-weight:600; letter-spacing:1px">Donors</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="sc_hospitals">500+</div>
+                    <div class="text-muted text-uppercase" style="font-size: 0.85rem; font-weight:600; letter-spacing:1px">Hospitals</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="text-muted text-uppercase" style="font-size: 0.85rem; font-weight:600; letter-spacing:1px">Blood Types</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="text-muted text-uppercase" style="font-size: 0.85rem; font-weight:600; letter-spacing:1px">Support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FEATURES ── -->
+    <section class="section container">
+        <div class="text-center" style="margin-bottom: 64px;" data-aos="fade-up">
+            <h2 style="font-size:2.5rem; margin-bottom:16px;">Intelligent Blood Management</h2>
+            <p class="text-muted" style="max-width:600px; margin:0 auto">Our platform automates the critical path between someone in need and someone ready to give.</p>
+        </div>
+
+        <div class="grid-2" style="grid-template-columns: repeat(3, 1fr); gap: 32px;">
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <div class="metric-icon red" style="margin-bottom:24px"><i data-lucide="zap"></i></div>
+                <h3 style="margin-bottom:12px">Real-Time Matching</h3>
+                <p class="text-muted" style="font-size:0.95rem">When a hospital logs a critical request, nearby compatible donors are instantly notified.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <div class="metric-icon green" style="margin-bottom:24px"><i data-lucide="shield-check"></i></div>
+                <h3 style="margin-bottom:12px">Verified Inventory</h3>
+                <p class="text-muted" style="font-size:0.95rem">Direct integrations with hospital blood banks ensure search results reflect accurate unit availability.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="300">
+                <div class="metric-icon blue" style="margin-bottom:24px"><i data-lucide="bot"></i></div>
+                <h3 style="margin-bottom:12px">AI Assistant 24/7</h3>
+                <p class="text-muted" style="font-size:0.95rem">Query live availability or ask eligibility questions to our floating AI helper anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script>
+        // Load Real Stats
+        fetch('http://localhost:5000/api/stats').then(r => r.json()).then(res => {
+            if(res.success) {
+                document.getElementById('sc_donors').innerText = res.stats.total_donors.toLocaleString() + '+';
+                document.getElementById('sc_hospitals').innerText = res.stats.total_hospitals.toLocaleString() + '+';
+            }
+        }).catch(e => {});
+    </script>
+</body>
+</html>

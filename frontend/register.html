@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Life Drop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-dark);
+            position: relative;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 600px;
+            padding: 48px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 10;
+            position: relative;
+        }
+
+        .auth-header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .auth-title { font-size: 1.75rem; margin-bottom: 8px; }
+        .auth-subtitle { color: var(--text-muted); font-size: 0.95rem; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .blob-bg {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.12;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="blob-bg"></div>
+        <div class="auth-card">
+            
+            <a href="index.html" style="position:absolute; top: 24px; left: 24px; color: var(--text-muted); display:flex; gap:8px; align-items:center;">
+                <i data-lucide="arrow-left" width="16"></i> Home
+            </a>
+
+            <div class="auth-header">
+                <i data-lucide="droplet" style="color:var(--primary); width:32px; height:32px; margin-bottom:12px; filter: drop-shadow(0 0 8px var(--primary-glow))"></i>
+                <h1 class="auth-title">Create Account</h1>
+                <p class="auth-subtitle">Join the life-saving network.</p>
+            </div>
+
+            <div class="role-tabs">
+                <div class="role-tab active" data-role="donor">Blood Donor</div>
+                <div class="role-tab" data-role="hospital">Hospital / Bank</div>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <input type="hidden" id="regRole" value="donor">
+                <div class="error-text" id="regError" style="margin-bottom: 16px; text-align: center;"></div>
+
+                <!-- ── COMMON FIELDS ──────────────────────────────────── -->
+                <div class="form-group">
+                    <input type="text" id="regName" class="form-input" placeholder=" " required>
+                    <label class="form-label" for="regName">Full Name / Administrator Name</label>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <input type="email" id="regEmail" class="form-input" placeholder=" " required>
+                        <label class="form-label" for="regEmail">Email Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="regPassword" class="form-input" placeholder=" " required>
+                        <label class="form-label" for="regPassword">Password</label>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <select id="regCity" class="form-input" required>
+                            <option value="" disabled selected></option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                        </select>
+                        <label class="form-label" for="regCity">City</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="regPhone" class="form-input" placeholder=" " required>
+                        <label class="form-label" for="regPhone">Phone Number</label>
+                    </div>
+                </div>
+
+                <!-- ── DONOR FIELDS ───────────────────────────────────── -->
+                <div id="donorFields">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <select id="bloodType" class="form-input">
+                                <option value="" disabled selected></option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                            <label class="form-label" for="bloodType">Blood Type *</label>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <input type="number" id="age" class="form-input" placeholder=" ">
+                                <label class="form-label" for="age">Age</label>
+                            </div>
+                            <div class="form-group">
+                                <select id="gender" class="form-input">
+                                    <option value="" disabled selected></option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <label class="form-label" for="gender">Gender</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div style="display:flex; align-items:center; gap:12px; margin-top: 8px;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="isAvailable" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span id="availLabel" style="font-weight:600; color:var(--success); font-size:0.9rem;">Available to Donate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── HOSPITAL FIELDS ────────────────────────────────── -->
+                <div id="hospitalFields" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" id="hospitalName" class="form-input" placeholder=" ">
+                        <label class="form-label" for="hospitalName">Hospital / Blood Bank Name *</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="licenseNumber" class="form-input" placeholder=" ">
+                        <label class="form-label" for="licenseNumber">Medical License Number *</label>
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px;">
+                    <button type="submit" class="btn btn-primary" id="regBtn" style="width: 100%; padding: 14px;">
+                        Create Account
+                    </button>
+                </div>
+                
+                <div style="margin-top:24px; text-align:center; font-size:0.9rem; color:var(--text-muted)">
+                    Already have an account? <a href="login.html" style="font-weight:600; color:var(--text-primary)">Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/auth.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

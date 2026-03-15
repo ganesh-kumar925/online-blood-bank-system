@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Blood | Life Drop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .type-pill {
+            padding: 12px 24px;
+            border-radius: 99px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .type-pill:hover { border-color: var(--text-secondary); background: rgba(255,255,255,0.05); }
+        .type-pill.active { background: var(--primary); border-color: var(--primary-hover); color: white; box-shadow: 0 4px 12px var(--primary-glow); }
+
+        .search-hero { padding-top: 120px; padding-bottom: 40px; text-align: center; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 32px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand"><i data-lucide="droplet"></i> Life Drop</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="search.html" class="nav-link active">Find Blood</a>
+            <a href="donate.html" class="nav-link">Donate</a>
+            <a href="request.html" class="nav-link">Request Blood</a>
+            <a href="admin.html" class="nav-link text-warning" style="font-weight:600">Admin</a>
+        </div>
+        <!-- 
+        ========================================================================
+        AUTH READY
+        <div class="auth-buttons-container">
+            <a href="login.html" class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Sign In</a>
+            <a href="register.html" class="btn btn-primary" style="padding: 6px 16px; font-size: 0.9rem;">Join Now</a>
+        </div> 
+        ========================================================================
+        -->
+    </nav>
+
+    <div class="search-hero container">
+        <h1 data-aos="fade-up">Blood Availability Directory</h1>
+        <p class="text-muted" style="max-width:600px; margin:0 auto 40px" data-aos="fade-up" data-aos-delay="100">Our system automatically includes compatible blood types in your search results (E.g. O- is compatible universally).</p>
+
+        <div class="card card-glass" style="max-width: 800px; margin: 0 auto; text-align: left;" data-aos="fade-up" data-aos-delay="200">
+            
+            <div style="margin-bottom: 32px">
+                <label class="form-label" style="position:static; display:block; margin-bottom:12px; transform:none; color:var(--text-primary)">1. Select Blood Type Required</label>
+                <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                    <div class="type-pill" data-type="A+">A+</div>
+                    <div class="type-pill" data-type="A-">A-</div>
+                    <div class="type-pill" data-type="B+">B+</div>
+                    <div class="type-pill" data-type="B-">B-</div>
+                    <div class="type-pill" data-type="AB+">AB+</div>
+                    <div class="type-pill" data-type="AB-">AB-</div>
+                    <div class="type-pill" data-type="O+">O+</div>
+                    <div class="type-pill active" data-type="O-">O-</div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 32px;">
+                <input type="text" id="searchCity" class="form-input" placeholder=" " value="Mumbai">
+                <label class="form-label" for="searchCity">2. Enter City Name (Try Mumbai or Delhi)</label>
+            </div>
+
+            <button class="btn btn-primary" id="searchBtn" style="width: 100%; padding: 16px; font-size: 1.1rem;">
+                Search Directory <i data-lucide="search" width="18"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container section" style="padding-top: 0;">
+        <h2 id="resultsHeader" style="display:none; font-size:1.5rem;">Match Results</h2>
+        <div class="results-grid" id="resultsGrid">
+            <!-- Populated by search.js -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

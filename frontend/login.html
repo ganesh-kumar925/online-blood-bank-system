@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Life Drop Blood Bank</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-bg {
+            flex: 1;
+            background: url('https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&q=80') center/cover no-repeat;
+            position: relative;
+            display: none;
+        }
+
+        @media (min-width: 900px) {
+            .auth-bg { display: block; }
+        }
+
+        .auth-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, var(--bg-dark) 0%, rgba(10, 10, 15, 0.4) 100%);
+        }
+
+        .auth-form-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            z-index: 10;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 48px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .auth-header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .auth-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .auth-brand svg {
+            color: var(--primary);
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+        }
+
+        .auth-title {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .blob-bg {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            top: -200px;
+            right: -200px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="blob-bg"></div>
+        <div class="auth-form-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="index.html" class="auth-brand">
+                        <i data-lucide="droplet"></i> Life Drop
+                    </a>
+                    <h1 class="auth-title">Welcome Back</h1>
+                    <p class="auth-subtitle">Sign in to your account to continue.</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <input type="email" id="email" class="form-input" placeholder=" " required>
+                        <label class="form-label" for="email">Email Address</label>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <input type="password" id="password" class="form-input" placeholder=" " required>
+                        <label class="form-label" for="password">Password</label>
+                    </div>
+
+                    <div class="error-text" id="loginError" style="margin-bottom: 16px; text-align: center;"></div>
+
+                    <button type="submit" class="btn btn-primary" id="loginBtn" style="width: 100%; padding: 14px;">
+                        Login to Dashboard
+                    </button>
+                    
+                    <div class="auth-footer">
+                        Don't have an account? <a href="register.html" style="font-weight: 600; color: var(--text-primary);">Register here</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="auth-bg"></div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/auth.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

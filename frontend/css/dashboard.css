@@ -1,0 +1,186 @@
+/* ==========================================================
+ * Dashboard Layout - Blood Bank System
+ * Admin, Request and Global Data Tables structural code
+ * ========================================================== */
+
+ .dashboard-body {
+    background: var(--bg-dark);
+    display: flex;
+    min-height: 100vh;
+    padding-top: 72px; /* For fixed public navbar */
+}
+
+/* Note: In this Auth-Ready version without login constraints, 
+   we still format specific pages (like admin.html) to look like dashboards 
+   even though they are publicly accessible for now. */
+
+/* ── Container Override for Dashboards ── */
+.dashboard-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; 
+    padding: 32px 5%;
+}
+
+.dashboard-header {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+/* ── Metric Cards Grid ── */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.metric-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.metric-icon.red { background: rgba(192, 21, 42, 0.15); color: var(--primary); }
+.metric-icon.green { background: var(--success-bg); color: var(--success); }
+.metric-icon.blue { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+.metric-icon.amber { background: var(--warning-bg); color: var(--warning); }
+
+.metric-info h4 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-family: var(--font-body);
+}
+
+.metric-info .value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    line-height: 1;
+}
+
+/* ── Dark Data Tables ── */
+.table-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface);
+}
+
+.table-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.search-filter {
+    position: relative;
+    width: 300px;
+}
+
+.search-filter i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.search-filter input {
+    width: 100%;
+    padding: 8px 16px 8px 40px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    color: var(--text-primary);
+    outline: none;
+    transition: var(--transition);
+}
+
+.search-filter input:focus {
+    border-color: var(--primary);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    padding: 16px 24px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background: rgba(255,255,255,0.02);
+}
+
+/* Expiry row indicator */
+tr.expiry-warn {
+    background: rgba(245, 158, 11, 0.05); /* Slight amber tint */
+}
+
+
+/* ── General Utilities for App ── */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

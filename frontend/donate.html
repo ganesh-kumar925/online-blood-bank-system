@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Donor | Life Drop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        .wizard-container {
+            max-width: 600px;
+            margin: 100px auto 40px;
+        }
+
+        .step-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step-progress::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
+        }
+
+        .step-indicator.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .step-indicator.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .wizard-step { display: none; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand"><i data-lucide="droplet"></i> Life Drop</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="search.html" class="nav-link">Find Blood</a>
+            <a href="donate.html" class="nav-link active">Donate</a>
+            <a href="request.html" class="nav-link">Request Blood</a>
+            <a href="admin.html" class="nav-link text-warning" style="font-weight:600">Admin</a>
+        </div>
+        <!-- AUTH READY -->
+    </nav>
+
+    <!-- Success Output -->
+    <div class="container" id="successScreen" style="display:none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center;">
+        <i data-lucide="heart" style="width: 80px; height: 80px; color: var(--primary); filter: drop-shadow(0 0 20px var(--primary-glow)); margin-bottom: 24px; animation: pulseDanger 2s infinite;"></i>
+        <h1 style="font-size: 3rem; margin-bottom: 16px;">Thank You!</h1>
+        <p class="subtitle">You've successfully joined the Life Drop Donor Network.<br>Thank you for stepping up to save lives.</p>
+        <a href="search.html" class="btn btn-outline" style="margin-top: 32px;">Return to Directory</a>
+    </div>
+
+    <!-- Wizard Form -->
+    <div class="container wizard-container" id="wizardContainer" data-aos="fade-up">
+        
+        <div class="text-center" style="margin-bottom: 32px;">
+            <h2>Donor Registration</h2>
+            <p class="text-muted">Join the active blood network in 3 simple steps.</p>
+        </div>
+
+        <div class="step-progress">
+            <div class="step-indicator active" id="ind1">1</div>
+            <div class="step-indicator" id="ind2">2</div>
+            <div class="step-indicator" id="ind3">3</div>
+        </div>
+
+        <div class="card card-glass">
+            <form id="donorForm">
+                
+                <!-- STEP 1: Personal Info -->
+                <div class="wizard-step" id="step1" style="display: block;">
+                    <h3 style="margin-bottom: 24px;">Personal Information</h3>
+                    
+                    <div class="form-group">
+                        <input type="text" id="d_name" class="form-input" placeholder=" " required>
+                        <label class="form-label" for="d_name">Full Name *</label>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <input type="email" id="d_email" class="form-input" placeholder=" " required>
+                            <label class="form-label">Email Address *</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="d_phone" class="form-input" placeholder=" ">
+                            <label class="form-label">Phone Number</label>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <select id="d_city" class="form-input" required>
+                                <option value="" disabled selected></option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Bangalore">Bangalore</option>
+                                <option value="Chennai">Chennai</option>
+                                <option value="Hyderabad">Hyderabad</option>
+                            </select>
+                            <label class="form-label">Primary City *</label>
+                        </div>
+                        <div class="form-group">
+                            <select id="d_gender" class="form-input">
+                                <option value="" disabled selected></option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <label class="form-label">Gender (Optional)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Medical Info -->
+                <div class="wizard-step" id="step2">
+                    <h3 style="margin-bottom: 24px;">Medical Profile</h3>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <select id="d_blood" class="form-input" required>
+                                <option value="" disabled selected></option>
+                                <option value="A+">A+</option><option value="A-">A-</option>
+                                <option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                <option value="O+">O+</option><option value="O-">O-</option>
+                            </select>
+                            <label class="form-label">Blood Type *</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="d_age" class="form-input" placeholder=" " min="18" max="65">
+                            <label class="form-label">Age (Must be 18+)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="d_history" class="form-input" placeholder=" ">
+                        <label class="form-label">Relevant Medical History (Optional)</label>
+                    </div>
+
+                    <div class="card" style="background:var(--bg-dark); padding:16px; margin-top:24px;">
+                        <div class="flex-between">
+                            <div>
+                                <h4 style="margin-bottom:4px; font-size:1rem;">Available to Donate</h4>
+                                <p class="text-muted" style="font-size:0.85rem;">Allow hospitals to match you with urgent requests in your city automatically.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="d_avail" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Review -->
+                <div class="wizard-step" id="step3">
+                    <h3 style="margin-bottom: 24px;">Confirm Details</h3>
+                    <div id="reviewSummary" class="card" style="background:var(--bg-dark); padding:24px; font-size:0.95rem;">
+                        <!-- JS injected -->
+                    </div>
+                    <p class="text-muted" style="font-size:0.85rem; margin-top:16px;">
+                        By submitting, you agree to join the public Life Drop matching registry. (No login required for this demo flow).
+                    </p>
+                </div>
+
+            </form>
+
+            <div class="flex-between" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
+                <button type="button" class="btn btn-outline" id="btnPrev" style="display: none;">Back</button>
+                <div style="flex:1"></div>
+                <button type="button" class="btn btn-primary" id="btnNext">Continue</button>
+                <button type="submit" class="btn btn-primary" id="btnSubmit" form="donorForm" style="display: none; background: linear-gradient(135deg, var(--success), #059669);">Join Registry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/donate.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

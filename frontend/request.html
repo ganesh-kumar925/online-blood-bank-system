@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Blood | Life Drop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .wizard-container { max-width: 600px; margin: 100px auto 40px; }
+        .step-progress { display: flex; justify-content: space-between; margin-bottom: 40px; position: relative; }
+        .step-progress::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: var(--border); z-index: 0; }
+        
+        .step-indicator { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 600; position: relative; z-index: 1; transition: var(--transition); }
+        .step-indicator.active { background: var(--warning); border-color: var(--warning); color: #000; box-shadow: 0 0 16px rgba(245, 158, 11, 0.4); }
+        .step-indicator.completed { background: var(--success); border-color: var(--success); color: white; }
+
+        .wizard-step { display: none; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand"><i data-lucide="droplet"></i> Life Drop</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="search.html" class="nav-link">Find Blood</a>
+            <a href="donate.html" class="nav-link">Donate</a>
+            <a href="request.html" class="nav-link active">Request Blood</a>
+            <a href="admin.html" class="nav-link text-warning" style="font-weight:600">Admin</a>
+        </div>
+        <!-- AUTH READY -->
+    </nav>
+
+    <!-- Success Screen -->
+    <div class="container" id="reqSuccess" style="display:none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center;">
+        <i data-lucide="check-circle" style="width: 80px; height: 80px; color: var(--success); margin-bottom: 24px;"></i>
+        <h1 style="font-size: 2.5rem; margin-bottom: 16px;">Request Broadcasted</h1>
+        <p class="subtitle" style="margin-bottom:24px;">Your emergency request has been logged in the Life Drop network.<br>Compatible donors within your city are being notified.</p>
+        <div class="badge badge-primary" style="font-size: 1rem; padding: 8px 16px; margin-bottom: 32px;">Tracking ID: <span id="displayReqId">REQ-000</span></div>
+        <a href="admin.html" class="btn btn-outline" style="margin-top: 16px;">View on Admin Master Dashboard</a>
+    </div>
+
+    <!-- Wizard Form -->
+    <div class="container wizard-container" id="reqWizard" data-aos="fade-up">
+        
+        <div class="text-center" style="margin-bottom: 32px;">
+            <h2>Hospital Request Portal</h2>
+            <p class="text-muted">Broadcast a blood request to our network of active donors.</p>
+        </div>
+
+        <div class="step-progress">
+            <div class="step-indicator active" id="rInd1">1</div>
+            <div class="step-indicator" id="rInd2">2</div>
+            <div class="step-indicator" id="rInd3">3</div>
+            <div class="step-indicator" id="rInd4">4</div>
+        </div>
+
+        <div class="card card-glass" style="border-top: 4px solid var(--warning)">
+            <form id="requestForm">
+                
+                <!-- STEP 1: Hospital Info -->
+                <div class="wizard-step" id="rStep1" style="display: block;">
+                    <h3 style="margin-bottom: 24px;">Hospital Information</h3>
+                    
+                    <div class="form-group">
+                        <input type="text" id="r_hname" class="form-input" placeholder=" " required>
+                        <label class="form-label">Hospital Name *</label>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <select id="r_hcity" class="form-input" required>
+                                <option value="" disabled selected></option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Bangalore">Bangalore</option>
+                                <option value="Chennai">Chennai</option>
+                                <option value="Hyderabad">Hyderabad</option>
+                            </select>
+                            <label class="form-label">City *</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="r_contact" class="form-input" placeholder=" ">
+                            <label class="form-label">Contact Person</label>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <input type="tel" id="r_phone" class="form-input" placeholder=" ">
+                            <label class="form-label">Phone</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="r_email" class="form-input" placeholder=" ">
+                            <label class="form-label">Email</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Blood Details -->
+                <div class="wizard-step" id="rStep2">
+                    <h3 style="margin-bottom: 24px;">Blood Requirements</h3>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <select id="r_blood" class="form-input" required>
+                                <option value="" disabled selected></option>
+                                <option value="A+">A+</option><option value="A-">A-</option>
+                                <option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                <option value="O+">O+</option><option value="O-">O-</option>
+                            </select>
+                            <label class="form-label">Blood Type *</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="r_units" class="form-input" placeholder=" " min="1" max="50" required>
+                            <label class="form-label">Total Units Needed *</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="r_urgency" class="form-input" style="font-weight:600">
+                            <option value="Normal">Normal Request</option>
+                            <option value="Urgent">Urgent (Within 48 hours)</option>
+                            <option value="Critical">Critical (Immediate match required)</option>
+                        </select>
+                        <label class="form-label">Priority Level</label>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Patient Info -->
+                <div class="wizard-step" id="rStep3">
+                    <h3 style="margin-bottom: 24px;">Patient Profile (Optional)</h3>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <input type="text" id="r_pname" class="form-input" placeholder=" ">
+                            <label class="form-label">Patient Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="r_page" class="form-input" placeholder=" ">
+                            <label class="form-label">Age</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="r_doc" class="form-input" placeholder=" ">
+                        <label class="form-label">Attending Doctor Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="r_notes" class="form-input" placeholder=" ">
+                        <label class="form-label">Medical Notes</label>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Review -->
+                <div class="wizard-step" id="rStep4">
+                    <h3 style="margin-bottom: 24px;">Confirm Request Overview</h3>
+                    <div id="reqSummary" class="card" style="background:var(--bg-dark); padding:24px; font-size:0.95rem;">
+                        <!-- JS injected -->
+                    </div>
+                    
+                    <div class="card" style="margin-top:16px; background:rgba(245, 158, 11, 0.1); border-color:rgba(245, 158, 11, 0.3);">
+                        <p style="font-size:0.85rem; color:var(--text-primary)">
+                            <i data-lucide="info" width="16" style="color:var(--warning); vertical-align:-3px; margin-right:4px;"></i>
+                            By submitting this request, matched donors will be immediately notified if marked as Critical or Urgent.
+                        </p>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="flex-between" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
+                <button type="button" class="btn btn-outline" id="rPrev" style="display: none;">Back</button>
+                <div style="flex:1"></div>
+                <button type="button" class="btn btn-primary" id="rNext">Next Step</button>
+                <button type="submit" class="btn btn-primary" id="rSubmit" form="requestForm" style="display: none; background: linear-gradient(135deg, var(--warning), #D97706); color: #000;">Broadcast Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/request.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

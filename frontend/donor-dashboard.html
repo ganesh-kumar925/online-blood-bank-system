@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard | Life Drop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────────────────────── -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i data-lucide="droplet"></i> Life Drop
+        </div>
+        <div class="sidebar-nav">
+            <div class="sidebar-item active" data-target="section-overview">
+                <i data-lucide="layout-dashboard"></i> Overview
+            </div>
+            <div class="sidebar-item" data-target="section-history">
+                <i data-lucide="history"></i> Donation History
+            </div>
+            <a href="search.html" class="sidebar-item" style="text-decoration:none">
+                <i data-lucide="search"></i> Find Blood
+            </a>
+            <div class="sidebar-item text-danger" onclick="logout()" style="margin-top:auto; color:var(--danger)">
+                <i data-lucide="log-out"></i> Logout
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ─────────────────────────────────────────────────── -->
+    <main class="dashboard-wrapper">
+        <!-- Dashboard Navbar -->
+        <nav class="dashboard-nav">
+            <div class="dash-nav-left">
+                <h2 style="font-size:1.25rem; margin:0">Donor Portal</h2>
+            </div>
+            <div class="dash-nav-right">
+                <button class="notification-btn" id="notifToggle" onclick="document.getElementById('notifDrawer').classList.toggle('open')">
+                    <i data-lucide="bell"></i>
+                    <span class="notif-badge" id="notifCount" style="display:none">0</span>
+                </button>
+                <div class="avatar-row">
+                    <div class="avatar-circle user-avatar-display">JD</div>
+                    <span class="text-primary" style="font-weight:600" class="user-name-display">John Doe</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dynamic Content Sections -->
+        
+        <!-- SECTION: Overview -->
+        <section id="section-overview" class="dashboard-content active">
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon red">
+                        <i data-lucide="droplet" width="24" height="24"></i>
+                    </div>
+                    <div class="metric-info">
+                        <h4>Your Blood Type</h4>
+                        <div class="value" id="donorTypeDisplay">--</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon green">
+                        <i data-lucide="activity" width="24" height="24"></i>
+                    </div>
+                    <div class="metric-info">
+                        <h4>Total Donations</h4>
+                        <div class="value" id="totalDonationsDisplay">--</div>
+                    </div>
+                </div>
+
+                <div class="metric-card" style="align-items:center; justify-content:space-between">
+                    <div>
+                        <h4 style="color:var(--text-secondary); margin-bottom:8px">Availability Status</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px">Allow hospitals to contact you</p>
+                        <div class="badge badge-success" id="availBadge">Available</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="availabilityToggle" onchange="updateAvailability(this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="table-container" style="max-width: 800px;">
+                <div class="table-header">
+                    <h3>Recent Notifications & Alerts</h3>
+                </div>
+                <div style="padding: 24px;" id="dashboardNotifs">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: History -->
+        <section id="section-history" class="dashboard-content">
+            <h2 style="margin-bottom:24px">Donation History</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Hospital / Blood Bank</th>
+                            <th>Units Donated</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ── NOTIFICATIONS DRAWER ─────────────────────────────────────────── -->
+    <div class="notifications-drawer" id="notifDrawer">
+        <div class="drawer-header">
+            <h3>Notifications</h3>
+            <div style="display:flex; gap:12px; align-items:center">
+                <button class="btn btn-outline btn-sm" onclick="markAllRead()" style="font-size:0.75rem; padding:4px 8px">Mark all read</button>
+                <button class="notification-btn" onclick="document.getElementById('notifDrawer').classList.remove('open')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        </div>
+        <div class="drawer-body" id="notifList">
+            <div class="text-center text-muted" style="margin-top:40px">No notifications</div>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+        // Init
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(!requireAuth('donor')) return;
+            bindSidebar();
+            
+            await loadProfile();
+            await loadHistory();
+            await loadNotifications();
+        });
+
+        async function loadProfile() {
+            try {
+                const {data} = await apiFetch('/api/donors/profile');
+                if(data.success) {
+                    const p = data.profile;
+                    document.getElementById('donorTypeDisplay').textContent = p.blood_type;
+                    document.getElementById('availabilityToggle').checked = p.is_available === 1;
+                    updateAvailUI(p.is_available === 1);
+                }
+            } catch(e) { console.error('Profile err', e); }
+        }
+
+        function updateAvailUI(isAvail) {
+            const b = document.getElementById('availBadge');
+            b.className = isAvail ? 'badge badge-success' : 'badge badge-warning';
+            b.textContent = isAvail ? 'Available' : 'Unavailable';
+        }
+
+        async function updateAvailability(val) {
+            try {
+                const {data} = await apiFetch(`/api/donors/${userId}/availability`, {
+                    method: 'PUT', body: JSON.stringify({ is_available: val })
+                });
+                if(data.success) {
+                    showToast('Availability updated');
+                    updateAvailUI(val);
+                }
+            } catch(e) { showToast('Error updating status', 'error'); }
+        }
+
+        async function loadHistory() {
+            try {
+                const {data} = await apiFetch(`/api/donors/${localStorage.getItem('roleId')}/donations`);
+                const tbody = document.getElementById('historyTableBody');
+                if(!data.success || !data.donations.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No donation history found.</td></tr>';
+                    document.getElementById('totalDonationsDisplay').textContent = '0';
+                    return;
+                }
+                
+                document.getElementById('totalDonationsDisplay').textContent = data.donations.length;
+                let h = '';
+                data.donations.forEach(d => {
+                    const date = new Date(d.donation_date).toLocaleDateString();
+                    h += `
+                        <tr>
+                            <td><strong>${date}</strong></td>
+                            <td>${d.hospital_name || 'System Recorded'} (${d.city || ''})</td>
+                            <td>${d.units} units</td>
+                            <td><span class="badge badge-success">Completed</span></td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = h;
+            } catch(e) { 
+                document.getElementById('historyTableBody').innerHTML = '<tr><td colspan="4" class="text-danger text-center">Error loading data.</td></tr>';
+            }
+        }
+
+        async function loadNotifications() {
+            try {
+                const {data} = await apiFetch(`/api/notifications/${userId}`);
+                if(!data.success) return;
+                
+                const unread = data.notifications.filter(n => !n.is_read);
+                if(unread.length > 0) {
+                    const badge = document.getElementById('notifCount');
+                    badge.textContent = unread.length;
+                    badge.style.display = 'flex';
+                }
+
+                // Populate drawer
+                const list = document.getElementById('notifList');
+                const dashList = document.getElementById('dashboardNotifs');
+                
+                if(data.notifications.length === 0) {
+                    list.innerHTML = '<div class="text-center text-muted">No notifications</div>';
+                    dashList.innerHTML = '<div class="text-muted">No recent alerts.</div>';
+                    return;
+                }
+
+                let html = '';
+                data.notifications.slice(0, 10).forEach(n => {
+                    const icon = n.message.includes('URGENT') || n.message.includes('Critical') ? 'alert-circle' : 'info';
+                    html += `
+                        <div class="notif-item ${!n.is_read ? 'unread' : ''}" onclick="markRead(${n.id})">
+                            <div class="notif-icon"><i data-lucide="${icon}"></i></div>
+                            <div class="notif-content">
+                                <p>${n.message}</p>
+                                <span>${new Date(n.created_at).toLocaleString()}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                list.innerHTML = html;
+                dashList.innerHTML = html; // Mirror in dashboard for donor
+                if(window.lucide) lucide.createIcons();
+
+            } catch(e) { console.error('Notif err', e); }
+        }
+
+        async function markRead(id) {
+            await apiFetch(`/api/notifications/${id}/read`, { method: 'PUT' });
+            loadNotifications();
+        }
+
+        async function markAllRead() {
+            await apiFetch(`/api/notifications/read-all/${userId}`, { method: 'PUT' });
+            loadNotifications();
+        }
+    </script>
+</body>
+</html>
