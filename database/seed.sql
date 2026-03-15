@@ -60,3 +60,16 @@ INSERT INTO donations (donor_id, blood_type, units, donation_date) VALUES
 (2, 'A-', 1, '2024-01-10'),
 (3, 'B+', 1, '2023-09-05'),
 (5, 'O-', 1, '2023-12-20');
+
+-- 7. Donation Camps Seed Data
+INSERT INTO donation_camps (camp_name, location, city, organizer, start_date, end_date, contact_phone, status) VALUES
+('Mega Blood Drive 2024', 'Marine Drive Ground', 'Mumbai', 'Red Cross Society', DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 2 DAY), '9876543210', 'Upcoming'),
+('Life Drop Camp - Delhi', 'Central Park', 'Delhi', 'Apollo Hospitals', NOW(), DATE_ADD(NOW(), INTERVAL 5 HOUR), '9123456789', 'Active'),
+('Corporate Donation Week', 'Hitech City IT Park', 'Hyderabad', 'Microsoft HR', DATE_ADD(NOW(), INTERVAL 10 DAY), DATE_ADD(NOW(), INTERVAL 12 DAY), '9988776655', 'Upcoming'),
+('Community Blood Camp', 'Salt Lake Sector 5', 'Kolkata', 'Local Welfare Trust', DATE_SUB(NOW(), INTERVAL 15 DAY), DATE_SUB(NOW(), INTERVAL 15 DAY), '9000000000', 'Completed');
+
+-- 8. Notifications Seed Data
+INSERT INTO notifications (role, message) VALUES
+('donor', 'Urgent need for O+ blood in Mumbai. Check the inventory list!'),
+('hospital', 'Your request REQ-1002 has been matched with 3 compatible donors.'),
+('admin', 'New hospital registration request from City Hospital, Pune.');

@@ -11,6 +11,15 @@ const userAvatar = userName ? userName.substring(0, 2).toUpperCase() : 'U';
 
 // ── PROTECT ROUTES & INIT ─────────────────────────────────────────────
 function requireAuth(expectedRole = null) {
+    if (localStorage.getItem('DEMO_MODE') === 'true') {
+        // Mock data for demo
+        localStorage.setItem('userName', 'Demo User');
+        localStorage.setItem('role', expectedRole || 'admin');
+        localStorage.setItem('userId', '1');
+        localStorage.setItem('roleId', '1');
+        return true;
+    }
+    
     if (!token) {
         window.location.href = 'login.html';
         return false;

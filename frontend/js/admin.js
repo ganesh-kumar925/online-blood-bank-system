@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadInventory();
     await loadRequests();
     await loadDonors();
+    await loadNotifications();
 });
 
 async function loadInventory() {
@@ -101,4 +102,33 @@ async function loadDonors() {
         `;
     });
     tbody.innerHTML = h;
+}
+async function loadNotifications() {
+    try {
+        const { success, data } = await window.apiFetch('/api/notifications');
+        if (!success) return;
+
+        const list = document.getElementById('adminNotifList');
+        if(!list) return;
+
+        let h = '';
+        data.notifications.forEach(n => {
+            const icon = n.message.includes('Urgent') || n.message.includes('Critical') ? 'alert-circle' : 'info';
+            const color = n.message.includes('Urgent') ? 'var(--danger)' : 'var(--primary)';
+            
+            h += `
+                <div class="card" style="margin-bottom: 8px; padding: 12px; border-left: 4px solid ${color}; background: rgba(255,255,255,0.03);">
+                    <div style="display:flex; gap:12px; align-items:start;">
+                        <i data-lucide="${icon}" width="16" style="color:${color}; margin-top:2px;"></i>
+                        <div>
+                            <p style="font-size:0.9rem; margin-bottom:4px;">${n.message}</p>
+                            <span class="text-muted" style="font-size:0.75rem;">${new Date(n.created_at).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        list.innerHTML = h || '<div class="text-center text-muted">No recent alerts.</div>';
+        if(typeof lucide !== 'undefined') lucide.createIcons();
+    } catch(e) { console.error('Notif load err', e); }
 }

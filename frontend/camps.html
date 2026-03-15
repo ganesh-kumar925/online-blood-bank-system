@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Camps | Life Drop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .camps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+        .camp-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            transition: transform 0.3s ease;
+        }
+        .camp-card:hover { rotate: 1deg; }
+        .camp-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+        .status-upcoming { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .status-active { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .status-completed { background: rgba(160, 160, 184, 0.1); color: var(--text-secondary); }
+        
+        .camp-info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .camp-info-item i { color: var(--primary); width: 18px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand"><i data-lucide="droplet"></i> Life Drop</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="search.html" class="nav-link">Find Blood</a>
+            <a href="camps.html" class="nav-link active">Camps</a>
+            <a href="donate.html" class="nav-link">Donate</a>
+            <a href="request.html" class="nav-link">Request</a>
+            <a href="admin.html" class="nav-link text-warning">Admin</a>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 120px;">
+        <header style="text-align: center; margin-bottom: 60px;" data-aos="fade-down">
+            <h1 class="hero-title" style="font-size: 3rem;">Donation <span class="text-gradient">Camps</span></h1>
+            <p class="subtitle">Join a nearby drive and save lives today.</p>
+        </header>
+
+        <div id="campsLoader" style="text-align: center; padding: 40px;">
+            <div class="spinner"></div>
+            <p style="margin-top: 16px; color: var(--text-secondary);">Identifying nearby blood drives...</p>
+        </div>
+
+        <div class="camps-grid" id="campsContainer">
+            <!-- JS injected -->
+        </div>
+
+        <div id="noCamps" style="display: none; text-align: center; padding: 60px;" data-aos="zoom-in">
+            <i data-lucide="calendar-off" style="width: 64px; height: 64px; color: var(--text-muted); margin-bottom: 24px;"></i>
+            <h3>No scheduled camps found</h3>
+            <p class="text-secondary">Check back soon for upcoming donation events.</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            AOS.init({ duration: 800, once: true });
+            if(window.lucide) lucide.createIcons();
+            
+            await fetchCamps();
+        });
+
+        async function fetchCamps() {
+            try {
+                const res = await fetch('http://localhost:5000/api/camps');
+                const data = await res.json();
+                
+                document.getElementById('campsLoader').style.display = 'none';
+                
+                if(!data.success || data.camps.length === 0) {
+                    document.getElementById('noCamps').style.display = 'block';
+                    return;
+                }
+
+                const container = document.getElementById('campsContainer');
+                let html = '';
+                
+                data.camps.forEach((camp, idx) => {
+                    const statusClass = camp.status.toLowerCase();
+                    const startDate = new Date(camp.start_date).toLocaleDateString(undefined, {
+                        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+                    });
+                    const startTime = new Date(camp.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    html += `
+                        <div class="camp-card" data-aos="fade-up" data-aos-delay="${idx * 100}">
+                            <div class="camp-status status-${statusClass}">${camp.status}</div>
+                            <h3 style="margin-bottom: 16px; font-size: 1.4rem;">${camp.camp_name}</h3>
+                            <div class="camp-info-item">
+                                <i data-lucide="map-pin"></i>
+                                <span>${camp.location}, ${camp.city}</span>
+                            </div>
+                            <div class="camp-info-item">
+                                <i data-lucide="calendar"></i>
+                                <span>${startDate}</span>
+                            </div>
+                            <div class="camp-info-item">
+                                <i data-lucide="clock"></i>
+                                <span>${startTime} onwards</span>
+                            </div>
+                            <div class="camp-info-item">
+                                <i data-lucide="user"></i>
+                                <span>Organized by ${camp.organizer}</span>
+                            </div>
+                            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                            <div style="display: flex; gap: 12px;">
+                                <a href="tel:${camp.contact_phone}" class="btn btn-outline btn-sm" style="flex: 1;">
+                                    <i data-lucide="phone" width="14" style="margin-right: 4px;"></i> Call
+                                </a>
+                                <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="showToast('Registered for ${camp.camp_name}!')">
+                                    Register
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                if(window.lucide) lucide.createIcons();
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('campsLoader').innerHTML = '<p class="text-danger">Failed to load data. Ensure backend is running.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

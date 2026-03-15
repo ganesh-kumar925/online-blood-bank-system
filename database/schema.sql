@@ -84,3 +84,27 @@ CREATE TABLE donations (
     donation_date DATE NOT NULL,
     FOREIGN KEY (donor_id) REFERENCES donors(id) ON DELETE CASCADE
 );
+
+-- 7. Donation Camps Table
+CREATE TABLE donation_camps (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    camp_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    organizer VARCHAR(255),
+    start_date DATETIME NOT NULL,
+    end_date DATETIME NOT NULL,
+    contact_phone VARCHAR(20),
+    status ENUM('Upcoming', 'Active', 'Completed') DEFAULT 'Upcoming',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 8. Notifications Table
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT, -- Links to users or role-based logic
+    role VARCHAR(50), -- 'donor', 'hospital', 'admin'
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

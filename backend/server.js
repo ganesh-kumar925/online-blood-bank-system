@@ -26,6 +26,7 @@ const donorRoutes = require('./routes/donors');
 const requestRoutes = require('./routes/requests');
 const inventoryRoutes = require('./routes/inventory');
 const chatbotRoutes = require('./routes/chatbot');
+const campsRoutes = require('./routes/camps');
 const statsRoutes = require('./routes/stats'); // Adding the stats route
 
 // Mount Routes (NO AUTH CURRENTLY ACTIVE)
@@ -34,7 +35,8 @@ app.use('/api/donors', donorRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/chatbot', chatbotRoutes);
-app.use('/api/', statsRoutes); // Allows GET /api/stats
+app.use('/api/camps', campsRoutes);
+app.use('/api/stats', statsRoutes); // Allows GET /api/stats
 
 // Basic health check
 app.get('/api/health', (req, res) => {
