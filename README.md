@@ -3,6 +3,27 @@ A fully open, highly designed "Auth-Ready" web platform built for instant blood 
 
 Built with modern UI practices (Glassmorphism, gradients, Chart.js integrations) and supported by a robust Express.js / MySQL backend.
 
+## 🛠️ Technology Stack
+
+### Frontend
+- **HTML5 & CSS3**: Core structure with a custom "Glassmorphism" design system using CSS variables, custom properties, and responsive Flexbox/Grid layouts.
+- **JavaScript (Vanilla)**: Handles dynamic DOM manipulation, interactive multi-step wizards, and REST API communication.
+- **Libraries/Assets**: 
+  - `Chart.js` for data visualization on dashboards.
+  - `AOS` (Animate On Scroll) for smooth reveal transitions.
+  - `Lucide Icons` for sleek, modern SVG iconography.
+  - `canvas-confetti` for micro-animations on successful actions.
+
+### Backend
+- **Node.js**: Asynchronous JavaScript runtime environment.
+- **Express.js**: Fast, unopinionated routing and middleware engine.
+- **Architecture**: Separated into conceptual routes (`blood.js`, `donors.js`, `inventory.js`, `chatbot.js`).
+- **Authentication**: Pre-configured (Auth-Ready) with `jsonwebtoken` (JWT) and `bcryptjs` for secure password hashing.
+
+### Database
+- **MySQL**: Relational database structuring users, hospitals, donors, inventory tracking, and active requests. Accessed via `mysql2/promise` for asynchronous querying.
+
+---
 ## Project Architecture (Auth-Ready State)
 **CURRENT STATE:** All public and dashboard functionalities (Finding Blood, Registering Donors, Broadcasting Hospital Requests, Admin Charts) are completely open and accessible **without requiring login**.
 
