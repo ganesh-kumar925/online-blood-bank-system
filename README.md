@@ -70,7 +70,8 @@ Example using Python:
 cd frontend
 python -m http.server 3000
 ```
-Then visit `http://localhost:3000` in your browser.
+Then visit [**http://localhost:3000**](http://localhost:3000) in your browser to access the application.
+*(The backend API handles all requests natively at [http://localhost:5000](http://localhost:5000))*
 
 ---
 
