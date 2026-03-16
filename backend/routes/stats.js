@@ -1,5 +1,5 @@
 /* ==========================================================
- * Online Blood Bank System
+ * Life Drop
  * AUTH READY: Frontend Global Analytics endpoint
  * ==========================================================
  */

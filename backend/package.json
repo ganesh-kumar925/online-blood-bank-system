@@ -1,7 +1,7 @@
 {
   "name": "bloodbank-backend",
   "version": "1.0.0",
-  "description": "Online Blood Bank System - Backend API",
+  "description": "Life Drop - Backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
