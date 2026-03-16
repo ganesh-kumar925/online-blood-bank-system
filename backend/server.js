@@ -40,7 +40,7 @@ app.use('/api/stats', statsRoutes); // Allows GET /api/stats
 
 // Basic health check
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'Online', message: 'Blood Bank API is running. (Auth Ready)' });
+    res.json({ status: 'Online', message: 'Life Drop API is running. (Auth Ready)' });
 });
 
 // Start Server
