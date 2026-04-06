@@ -28,6 +28,7 @@ const inventoryRoutes = require('./routes/inventory');
 const chatbotRoutes = require('./routes/chatbot');
 const campsRoutes = require('./routes/camps');
 const statsRoutes = require('./routes/stats'); // Adding the stats route
+const notificationsRoutes = require('./routes/notifications'); // Notifications
 
 // Mount Routes (NO AUTH CURRENTLY ACTIVE)
 app.use('/api/blood', bloodRoutes);
@@ -37,6 +38,7 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/chatbot', chatbotRoutes);
 app.use('/api/camps', campsRoutes);
 app.use('/api/stats', statsRoutes); // Allows GET /api/stats
+app.use('/api/notifications', notificationsRoutes); // Notifications
 
 // Basic health check
 app.get('/api/health', (req, res) => {

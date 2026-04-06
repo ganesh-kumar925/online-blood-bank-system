@@ -1,15 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
-const { authenticate } = require('../middleware/authMiddleware');
 
-// Get all notifications for user
-router.get('/:userId', authenticate, async (req, res) => {
+// ==========================================================
+// AUTH READY: Authentication is currently dormant in this project phase
+// ==========================================================
+
+/**
+ * GET /api/notifications
+ * Description: Get all recent notifications for the Admin Dashboard.
+ */
+router.get('/', async (req, res) => {
     try {
-        if (req.user.userId.toString() !== req.params.userId) {
-            return res.status(403).json({ success: false, message: 'Unauthorized' });
-        }
+        const [notifications] = await db.query(
+            'SELECT id, role, message, is_read, created_at FROM notifications ORDER BY created_at DESC LIMIT 10'
+        );
+        res.json({ success: true, notifications });
+    } catch (err) {
+        console.error('Fetch Notifications Error:', err);
+        res.status(500).json({ success: false });
+    }
+});
 
+/**
+ * GET /api/notifications/:userId
+ * Description: Get notifications for a specific user (Auth Ready)
+ */
+router.get('/:userId', async (req, res) => {
+    try {
         const [notifications] = await db.query(
             'SELECT id, message, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC',
             [req.params.userId]
@@ -20,15 +38,13 @@ router.get('/:userId', authenticate, async (req, res) => {
     }
 });
 
-// Mark single notification read
-router.put('/:id/read', authenticate, async (req, res) => {
+/**
+ * PUT /api/notifications/:id/read
+ * Description: Mark a single notification as read.
+ */
+router.put('/:id/read', async (req, res) => {
     try {
-        const [notif] = await db.query('SELECT user_id FROM notifications WHERE id = ?', [req.params.id]);
-        if (!notif.length || notif[0].user_id !== req.user.userId) {
-            return res.status(403).json({ success: false, message: 'Unauthorized' });
-        }
-
-        await db.query('UPDATE notifications SET is_read = TRUE WHERE id = ?', [req.params.id]);
+        await db.query('UPDATE notifications SET is_read = 1 WHERE id = ?', [req.params.id]);
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false });
@@ -36,12 +52,8 @@ router.put('/:id/read', authenticate, async (req, res) => {
 });
 
 // Mark all read
-router.put('/read-all/:userId', authenticate, async (req, res) => {
+router.put('/read-all/:userId', async (req, res) => {
     try {
-        if (req.user.userId.toString() !== req.params.userId) {
-            return res.status(403).json({ success: false, message: 'Unauthorized' });
-        }
-
         await db.query('UPDATE notifications SET is_read = TRUE WHERE user_id = ?', [req.params.userId]);
         res.json({ success: true });
     } catch (err) {

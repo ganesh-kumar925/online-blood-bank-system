@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
         const [inventory] = await db.execute(`
             SELECT 
                 blood_bank_name, city, blood_type, units_available, expiry_date,
-                CASE WHEN expiry_date <= DATE_ADD(CURDATE(), INTERVAL 7 DAY) THEN 1 ELSE 0 END AS expiry_warning 
+                CASE WHEN expiry_date <= date('now', '+7 days') THEN 1 ELSE 0 END AS expiry_warning 
             FROM blood_inventory
             ORDER BY units_available ASC
         `);

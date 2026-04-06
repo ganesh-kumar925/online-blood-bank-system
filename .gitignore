@@ -3,3 +3,10 @@ node_modules
 .idea
 .vscode
 *.log
+
+# SQLite database (auto-generated at runtime)
+*.sqlite
+*.sqlite3
+
+# npm lock file (optional, remove if you want to track it)
+# package-lock.json

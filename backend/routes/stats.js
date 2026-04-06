@@ -8,7 +8,7 @@ const router = express.Router();
 const db = require('../models/db');
 
 // Currently mounted in server.js dynamically for the /stats shortcut
-router.get('/stats', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const [donors] = await db.execute('SELECT COUNT(*) as c FROM donors');
         const [hospitals] = await db.execute('SELECT COUNT(*) as c FROM hospitals');
